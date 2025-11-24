@@ -1,0 +1,22 @@
+{
+  "name": "Praise FM Nederland",
+  "short_name": "Praise NL",
+  "description": "Continue aanbidding 24/7 voor Nederland",
+  "lang": "nl-NL",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#FFD700",
+  "icons": [
+    {
+      "src": "/image/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/image/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
