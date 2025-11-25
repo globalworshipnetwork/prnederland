@@ -151,7 +151,6 @@
     </div>
 </div>
 <script>
-    // STREAM via Edge Function (geoblocking)
     const STREAM_URL = "/api/stream";
     const audio = new Audio(STREAM_URL);
     audio.volume = 0.8;
@@ -161,35 +160,32 @@
         nachtgenade: "/image/nachtgenade.webp",
         aanbidding: "/image/aanbidding.webp",
         ochtendshow: "/image/ochtendshow.webp",
-        middaggenade: "/image/middaggenade.webp",
-        nonstop: "/image/nonstop.webp",
-        thuisreis: "/image/thuisreis.webp",
-        pop: "/image/pop.webp",
         zondag: "/image/zondag.webp",
-        magazine: "/image/magazine.webp"
+        pop: "/image/pop.webp",
+        thuisreis: "/image/thuisreis.webp"
     };
 
     const hosts = {
         "Ochtendshow": "Lieke van Dijk",
-        "Middaggenade": "Daan Bakker",
-        "Praise FM Thuisreis": "Eva de Jong",
-        "Praise FM POP": "Luuk Vermeulen",
         "Zondag met Christus": "Joris de Wit",
-        "Nachtgenade": "Fleur Jansen",
-        "Praise FM Non Stop": "Praise FM",
-        "Praise FM Aanbidding": "Praise FM",
-        "Praise FM Magazine": "Praise FM"
+        "Praise FM POP": "Luuk Vermeulen",
+        "Praise FM Thuisreis": "Eva de Jong",
+        "Nachtgenade": "Fleur Jansen"
     };
 
-    // ✅ SCHEDULE ATUALIZADO: Nachtgenade das 00:00–06:00 (CET)
+    // ✅ SCHEDULE COM OCHTENDSHOW NO SÁBADO (dia 6)
     const schedule = [
         {start:"00:00", end:"06:00", name:"Nachtgenade", img:images.nachtgenade, desc: "Fleur Jansen omhult u met stilte en gebed."},
         {start:"06:00", end:"07:00", name:"Praise FM Aanbidding", img:images.aanbidding, desc: "Continue stroom van aanbidding."},
-        {start:"07:00", end:"12:00", name:"Ochtendshow", img:images.ochtendshow, days:[1,2,3,4,5], desc: "Lieke van Dijk begroet u met opbouwende lof."},
+        // Ochtendshow: segunda a SÁBADO (1,2,3,4,5,6)
+        {start:"07:00", end:"12:00", name:"Ochtendshow", img:images.ochtendshow, days:[1,2,3,4,5,6], desc: "Lieke van Dijk begroet u met opbouwende lof."},
+        // Zondag met Christus: domingo (0)
         {start:"07:00", end:"12:00", name:"Zondag met Christus", img:images.zondag, days:[0], desc: "Joris de Wit deelt geestelijke inzichten."},
         {start:"12:00", end:"17:00", name:"Praise FM Aanbidding", img:images.aanbidding, desc: "Continue stroom van aanbidding."},
         {start:"17:00", end:"18:00", name:"Praise FM POP", img:images.pop, desc: "Luuk Vermeulen presenteert de nieuwste lofzangen."},
+        // Thuisreis: segunda a sexta (1-5)
         {start:"18:00", end:"20:00", name:"Praise FM Thuisreis", img:images.thuisreis, days:[1,2,3,4,5], desc: "Eva de Jong begeleidt u naar huis."},
+        // Aanbidding: sábado e domingo (6,0) à noite
         {start:"18:00", end:"20:00", name:"Praise FM Aanbidding", img:images.aanbidding, days:[0,6], desc: "Continue stroom van aanbidding."},
         {start:"20:00", end:"00:00", name:"Praise FM Aanbidding", img:images.aanbidding, desc: "Continue stroom van aanbidding."}
     ];
@@ -279,7 +275,7 @@
     function formatProgramName(p) {
         if (!p) return "Praise FM Nederland";
         const base = p.name.replace(/ \([^)]*\)$/, '').trim();
-        if (["Praise FM Aanbidding", "Praise FM Non Stop", "Praise FM POP", "Praise FM Magazine"].includes(base)) {
+        if (["Praise FM Aanbidding", "Praise FM POP"].includes(base)) {
             return base;
         }
         const host = hosts[base] || "Praise FM";
