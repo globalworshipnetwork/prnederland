@@ -327,14 +327,14 @@
         if (trackTimer) clearInterval(trackTimer);
         const lowerTitle = title.toLowerCase();
         
-        // Detecta Commercial Break
-        if (lowerTitle.includes("commercial") || lowerTitle.includes("ad")) {
+        // Detecta comerciais (inclui "commerciell")
+        if (lowerTitle.includes("commercial") || lowerTitle.includes("ad") || lowerTitle.includes("commerciell")) {
             currentTrack = { title: "Commercial Break", artist: "Praise FM", duration: 0, startTime: 0 };
             document.getElementById("mainImg").src = images.commercial;
             document.getElementById("miniImg").src = images.commercial;
             return;
         }
-        // Detecta Spot
+        // Detecta spots
         if (lowerTitle.includes("spot")) {
             currentTrack = { title: "Spot", artist: "Praise FM", duration: 0, startTime: 0 };
             document.getElementById("mainImg").src = images.spot;
