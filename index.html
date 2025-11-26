@@ -163,7 +163,9 @@
         middaggenade: "/image/middaggenade.webp",
         zondag: "/image/zondag.webp",
         pop: "/image/pop.webp",
-        thuisreis: "/image/thuisreis.webp"
+        thuisreis: "/image/thuisreis.webp",
+        commercial: "/image/commerciell.png",  // ← com dois "l"
+        spot: "/image/spot.png"
     };
 
     const hosts = {
@@ -175,7 +177,6 @@
         "Nachtgenade": "Fleur Jansen"
     };
 
-    // ✅ SCHEDULE: Middaggenade todos os dias (sem 'days')
     const schedule = [
         {start:"00:00", end:"06:00", name:"Nachtgenade", img:images.nachtgenade, desc: "Fleur Jansen omhult u met stilte en gebed."},
         {start:"06:00", end:"07:00", name:"Praise FM Aanbidding", img:images.aanbidding, desc: "Continue stroom van aanbidding."},
@@ -264,7 +265,7 @@
         try {
             const res = await fetch(url);
             const data = await res.json();
-            if (data.results && data.results[0] && data.results[0].artworkUrl100) {
+            if (data.results?.[0]?.artworkUrl100) {
                 return data.results[0].artworkUrl100.replace('100x100', '600x600');
             }
         } catch (e) {}
@@ -324,25 +325,39 @@
 
     async function processMetadata(artist, title) {
         if (trackTimer) clearInterval(trackTimer);
-        if (title.toLowerCase().includes("commercial") || title.toLowerCase().includes("ad")) {
-            currentTrack = {title:"", artist:"", duration:0, startTime:0};
-        } else {
-            currentTrack = {title, artist, duration:0, startTime:Date.now()};
-            const cover = await fetchAlbumCover(artist, title);
-            const key = `${artist}-${title}`;
-            if (!recents.some(t => t.key === key)) {
-                recents.unshift({title, artist, cover, key});
-                if (recents.length > 4) recents.pop();
-                document.getElementById("recentList").innerHTML = recents.map(t => `
-                    <div class="recent-item">
-                        <img src="${t.cover}" class="recent-cover" onerror="this.src='${images.default}'">
-                        <div>
-                            <div class="recent-title">${t.title}</div>
-                            <div class="recent-artist">${t.artist}</div>
-                        </div>
+        const lowerTitle = title.toLowerCase();
+        
+        // Detecta Commercial Break
+        if (lowerTitle.includes("commercial") || lowerTitle.includes("ad")) {
+            currentTrack = { title: "Commercial Break", artist: "Praise FM", duration: 0, startTime: 0 };
+            document.getElementById("mainImg").src = images.commercial;
+            document.getElementById("miniImg").src = images.commercial;
+            return;
+        }
+        // Detecta Spot
+        if (lowerTitle.includes("spot")) {
+            currentTrack = { title: "Spot", artist: "Praise FM", duration: 0, startTime: 0 };
+            document.getElementById("mainImg").src = images.spot;
+            document.getElementById("miniImg").src = images.spot;
+            return;
+        }
+
+        // Música normal
+        currentTrack = { title, artist, duration: 0, startTime: Date.now() };
+        const cover = await fetchAlbumCover(artist, title);
+        const key = `${artist}-${title}`;
+        if (!recents.some(t => t.key === key)) {
+            recents.unshift({ title, artist, cover, key });
+            if (recents.length > 4) recents.pop();
+            document.getElementById("recentList").innerHTML = recents.map(t => `
+                <div class="recent-item">
+                    <img src="${t.cover}" class="recent-cover" onerror="this.src='${images.default}'">
+                    <div>
+                        <div class="recent-title">${t.title}</div>
+                        <div class="recent-artist">${t.artist}</div>
                     </div>
-                `).join("");
-            }
+                </div>
+            `).join("");
         }
         updateDisplay();
         trackTimer = setInterval(updateProgramProgress, 1000);
@@ -355,7 +370,7 @@
                 const d = JSON.parse(e.data);
                 if (d.streamTitle) {
                     const parts = d.streamTitle.split(" - ");
-                    processMetadata(parts[0]||"", parts.slice(1).join(" - ")||"");
+                    processMetadata(parts[0] || "", parts.slice(1).join(" - ") || "");
                 }
             } catch {}
         };
