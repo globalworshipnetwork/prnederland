@@ -3,39 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Praise FM Nederland</title>
-    <meta name="theme-color" content="#ff4d00">
-    <link rel="icon" type="image/png" sizes="32x32" href="./image/favicon-32x32.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="./image/apple-touch-icon.png">
+    <title>Praise FM Nederland - Live</title>
+    <meta name="theme-color" content="#1a365d">
+    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="manifest" href="/manifest.json">
     <style>
-        :root { --orange:#ff4d00; --dark:#111; --grey:#555; --light-grey:#888; --bg:#fff; --border-color:#ddd; }
+        :root { --primary:#1a365d; --dark:#111; --grey:#555; --light-grey:#888; --bg:#fff; --border-color:#ddd; }
         * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; }
         body { background:var(--bg); color:#000; min-height:100vh; padding-bottom:120px; display:flex; flex-direction:column; align-items:center; }
-        .container { width:100%; max-width:800px; padding:20px; text-align:center; }
-        .station-title { font-size:32px; font-weight:900; color:var(--orange); margin:20px 0 4px; }
+        .container { width:100%; max-width:900px; padding:20px; text-align:center; }
+        .station-title { font-size:32px; font-weight:900; color:var(--primary); margin:20px 0 4px; }
         .station-subtitle { font-size:17px; color:var(--grey); margin-bottom:30px; }
         .circle-container { width:min(80vw,320px); height:min(80vw,320px); margin:0 auto 20px; position:relative; }
-        .circle-border { position:absolute; inset:0; border-radius:50%; background:conic-gradient(var(--orange) 0%, transparent 0%);
+        .circle-border { position:absolute; inset:0; border-radius:50%; background:conic-gradient(var(--primary) 0%, transparent 0%);
             mask:radial-gradient(transparent 68%, black 70%); -webkit-mask:radial-gradient(transparent 68%, black 70%); }
         .circle-img { position:absolute; inset:6px; border-radius:50%; overflow:hidden; background:#000; }
         .circle-img img { width:100%; height:100%; object-fit:cover; }
-        .live-badge { display:inline-flex; align-items:center; gap:8px; color:var(--orange); font-weight:700; font-size:14px; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
-        .live-dot { width:9px; height:9px; background:var(--orange); border-radius:50%; animation:pulse 2s infinite; }
+        .live-badge { display:inline-flex; align-items:center; gap:8px; color:var(--primary); font-weight:700; font-size:14px; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
+        .live-dot { width:9px; height:9px; background:var(--primary); border-radius:50%; animation:pulse 2s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
         .program-title { font-size:28px; font-weight:800; margin:10px 0 30px; line-height:1.2; }
-        .play-button { margin:40px auto; width:200px; height:56px; background:var(--orange); color:#fff; border:none; border-radius:28px; font-size:18px; font-weight:700; cursor:pointer;
-            display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 6px 20px rgba(255,77,0,.3); transition:transform .2s; }
+        .play-button { margin:40px auto; width:220px; height:56px; background:var(--primary); color:#fff; border:none; border-radius:28px; font-size:18px; font-weight:700; cursor:pointer;
+            display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 6px 20px rgba(26,54,93,.3); transition:transform .2s; }
         .play-button:hover { transform:scale(1.05); }
         .play-button svg { width:24px; height:24px; fill:#fff; margin-left:10px; }
         .upnext { background:#f8f8f8; border-radius:12px; padding:20px; margin:40px 0; text-align:left; }
-        .upnext-header { font-size:13px; font-weight:700; color:var(--grey); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
         .upnext-items { display:flex; gap:20px; flex-wrap:wrap; }
         .upnext-item { flex:1; min-width:200px; display:flex; align-items:center; gap:16px; }
-        .upnext-img { width:60px; height:60px; border-radius:8px; object-fit:cover; background:#eee; }
+        .upnext-img { width:60px; height:60px; border-radius:0; object-fit:cover; background:#eee; }
+        .upnext-time { font-size:14px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px; }
+        .upnext-title { font-size:16px; font-weight:700; margin-top:4px; }
+        .upnext-desc { font-size:14px; color:var(--grey); margin-top:4px; }
         .recently { margin-top:40px; text-align:left; }
         .recently-header { font-size:13px; font-weight:700; color:var(--grey); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
         .recent-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-color); }
-        .recent-cover { width:48px; height:48px; border-radius:6px; object-fit:cover; background:#eee; }
+        .recent-cover { width:48px; height:48px; border-radius:0; object-fit:cover; background:#eee; }
         .recent-title { font-weight:600; font-size:15px; }
         .recent-artist { font-size:13px; color:var(--light-grey); }
         .mini-player {
@@ -43,48 +45,27 @@
             box-shadow:0 -4px 20px rgba(0,0,0,.1); padding:12px 16px; display:none; flex-direction:column; gap:10px; z-index:999;
         }
         .mini-player.show { display:flex; }
-        .mini-player-content {
-            display:flex; align-items:center; gap:12px; justify-content:space-between;
-        }
-        .mini-cover { width:56px; height:56px; border-radius:8px; object-fit:cover; background:#eee; }
+        .mini-player-content { display:flex; align-items:center; gap:12px; justify-content:space-between; flex-wrap:wrap; }
+        .mini-cover { width:56px; height:56px; border-radius:0; object-fit:cover; background:#eee; }
         .mini-info { flex:1; min-width:0; }
         .mini-title { font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .mini-artist { font-size:13px; color:var(--grey); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .mini-controls { display:flex; align-items:center; gap:16px; }
         .mini-btn { background:none; border:none; cursor:pointer; padding:8px; }
         .mini-btn svg { width:24px; height:24px; fill:var(--grey); }
-        .mini-play { background:var(--orange); width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-            border:none; cursor:pointer; box-shadow:0 2px 10px rgba(255,77,0,.3); }
+        .mini-play { background:var(--primary); width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:none; cursor:pointer; box-shadow:0 2px 12px rgba(26,54,93,.35); }
         .mini-play svg { width:20px; height:20px; fill:#fff; }
         .mini-volume { display:flex; align-items:center; gap:4px; width:100px; }
         .mini-volume-bar { flex:1; height:4px; background:#ddd; border-radius:2px; position:relative; cursor:pointer; }
-        .mini-volume-fill { height:100%; background:var(--orange); border-radius:2px; width:80%; }
-        .mini-track-progress {
-            width:100%;
-            padding:6px 0;
-        }
-        .mini-track-bar {
-            width:100%;
-            height:4px;
-            background:#ddd;
-            border-radius:2px;
-            position:relative;
-            cursor:pointer;
-        }
-        .mini-track-fill {
-            height:100%;
-            background:var(--orange);
-            border-radius:2px;
-            width:0%;
-        }
-        .mini-track-time {
-            display:flex;
-            justify-content:space-between;
-            font-size:11px;
-            color:var(--light-grey);
-            margin-top:4px;
-        }
-        @media (max-width:480px) {
+        .mini-volume-fill { height:100%; background:var(--primary); border-radius:2px; width:80%; }
+        .mini-track-progress { width:100%; padding:6px 0; }
+        .mini-track-bar { width:100%; height:4px; background:#ddd; border-radius:2px; position:relative; cursor:pointer; }
+        .mini-track-fill { height:100%; background:var(--primary); border-radius:2px; width:0%; }
+        .mini-track-time { display:flex; justify-content:space-between; font-size:11px; color:var(--light-grey); margin-top:4px; }
+        @media (max-width:480px) { 
+            .mini-player { padding:10px; } 
+            .mini-player-content { flex-direction:column; align-items:flex-start; gap:14px; } 
+            .mini-play { width:64px; height:64px; }
             .circle-container { width:260px; height:260px; }
             .program-title { font-size:24px; }
             .mini-controls { gap:10px; }
@@ -99,7 +80,7 @@
     <div class="circle-container">
         <div class="circle-border" id="progressRing"></div>
         <div class="circle-img">
-            <img id="mainImg" src="/image/logopraisefm.webp" alt="Now Playing">
+            <img id="mainImg" src="/image/logo-nl.webp" alt="Nu aan het spelen">
         </div>
     </div>
     <div class="live-badge"><div class="live-dot"></div> LIVE</div>
@@ -108,20 +89,21 @@
         <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Afspelen
     </button>
     <div class="upnext">
-        <div class="upnext-header">Volgende</div>
         <div class="upnext-items">
             <div class="upnext-item">
-                <img id="upnextImg1" src="/image/logopraisefm.webp" class="upnext-img">
+                <img id="upnextImg1" src="/image/nonstop.webp" class="upnext-img" onerror="this.src='/image/logo-nl.webp'">
                 <div>
-                    <div class="upnext-title" id="upnextTitle1">-</div>
                     <div class="upnext-time" id="upnextTime1">-</div>
+                    <div class="upnext-title" id="upnextTitle1">-</div>
+                    <div class="upnext-desc" id="upnextDesc1">-</div>
                 </div>
             </div>
             <div class="upnext-item">
-                <img id="upnextImg2" src="/image/logopraisefm.webp" class="upnext-img">
+                <img id="upnextImg2" src="/image/thuisreis.webp" class="upnext-img" onerror="this.src='/image/logo-nl.webp'">
                 <div>
-                    <div class="upnext-title" id="upnextTitle2">-</div>
                     <div class="upnext-time" id="upnextTime2">-</div>
+                    <div class="upnext-title" id="upnextTitle2">-</div>
+                    <div class="upnext-desc" id="upnextDesc2">-</div>
                 </div>
             </div>
         </div>
@@ -133,7 +115,7 @@
 </div>
 <div class="mini-player" id="miniPlayer">
     <div class="mini-player-content">
-        <img id="miniImg" src="/image/logopraisefm.webp" class="mini-cover">
+        <img id="miniImg" src="/image/logo-nl.webp" class="mini-cover">
         <div class="mini-info">
             <div class="mini-title" id="miniTitle">Praise FM Nederland</div>
             <div class="mini-artist" id="miniArtist">Continue Aanbidding</div>
@@ -169,69 +151,55 @@
     </div>
 </div>
 <script>
-    const STREAM_URL = "https://stream.zeno.fm/hvwifp8ezc6tv";
+    const STREAM_URL = "/api/stream";
     const audio = new Audio(STREAM_URL);
     audio.volume = 0.8;
+
     const images = {
-        default: "/image/logopraisefm.webp",
-        morning: "/image/ochtendshow.webp",
-        midday: "/image/middaggenade.webp",
-        midnight: "/image/nachtgezang.webp",
-        carpool: "/image/thuiszuis.webp",
-        pop: "/image/praisefmpop.webp",
-        sunday: "/image/zondagmetchristus.webp",
+        default: "/image/logo-nl.webp",
+        nachtgenade: "/image/nachtgenade.webp",
         aanbidding: "/image/aanbidding.webp",
-        nonstop: "/image/praisefmnonstop.png"
+        ochtendshow: "/image/ochtendshow.webp",
+        middaggenade: "/image/middaggenade.webp",
+        zondag: "/image/zondag.webp",
+        pop: "/image/pop.webp",
+        thuisreis: "/image/thuisreis.webp",
+        commercial: "/image/commerciell.png",  // ← com dois "l"
+        spot: "/image/spot.png"
     };
+
     const hosts = {
-        "Ochtendshow": "Presentator",
+        "Ochtendshow": "Lieke van Dijk",
         "Middaggenade": "Daan Bakker",
-        "Thuiszuis": "Presentator",
-        "Praise FM Pop": "DJ Pop",
-        "Zondag met Christus": "Pastor",
-        "Nachtgezang": "Presentator",
-        "Aanbidding": "Presentator",
-        "Non Stop": "Auto DJ"
+        "Zondag met Christus": "Joris de Wit",
+        "Praise FM POP": "Luuk Vermeulen",
+        "Praise FM Thuisreis": "Eva de Jong",
+        "Nachtgenade": "Fleur Jansen"
     };
+
     const schedule = [
-        // Maandag t/m Zaterdag
-        {start:"00:00", end:"06:00", name:"Nachtgezang", img:images.midnight, days:[1,2,3,4,5,6]},
-        {start:"06:00", end:"07:00", name:"Aanbidding", img:images.aanbidding, days:[1,2,3,4,5,6]},
-        {start:"07:00", end:"12:00", name:"Ochtendshow", img:images.morning, days:[1,2,3,4,5,6]},
-        {start:"12:00", end:"16:00", name:"Middaggenade", img:images.midday, days:[1,2,3,4,5,6]},
-        {start:"16:00", end:"17:00", name:"Praise FM Non Stop", img:images.nonstop, days:[1,2,3,4,5,6]},
-        {start:"17:00", end:"18:00", name:"Aanbidding", img:images.aanbidding, days:[1,2,3,4,5,6]},
-        {start:"18:00", end:"20:00", name:"Thuiszuis", img:images.carpool, days:[1,2,3,4,5,6]},
-        {start:"20:00", end:"20:30", name:"Praise FM Pop", img:images.pop, days:[1,2,3,4,5,6]},
-        {start:"20:30", end:"21:30", name:"Non Stop", img:images.nonstop, days:[1,2,3,4,5,6]},
-        {start:"21:30", end:"23:59", name:"Aanbidding", img:images.aanbidding, days:[1,2,3,4,5,6]},
-
-        // Zaterdag (overriding waar nodig)
-        {start:"00:00", end:"06:00", name:"Nachtgezang", img:images.midnight, days:[6]},
-        {start:"06:00", end:"07:00", name:"Aanbidding", img:images.aanbidding, days:[6]},
-        {start:"07:00", end:"12:00", name:"Ochtendshow", img:images.morning, days:[6]},
-        {start:"12:00", end:"16:00", name:"Middaggenade", img:images.midday, days:[6]},
-        {start:"16:00", end:"17:00", name:"Non Stop", img:images.nonstop, days:[6]},
-        {start:"17:00", end:"18:00", name:"Aanbidding", img:images.aanbidding, days:[6]},
-        {start:"18:00", end:"20:00", name:"Non Stop", img:images.nonstop, days:[6]},
-        {start:"20:00", end:"20:30", name:"Praise FM Pop", img:images.pop, days:[6]},
-        {start:"20:30", end:"23:59", name:"Aanbidding", img:images.aanbidding, days:[6]},
-
-        // Zondag
-        {start:"00:00", end:"06:00", name:"Nachtgezang", img:images.midnight, days:[0]},
-        {start:"06:00", end:"07:00", name:"Aanbidding", img:images.aanbidding, days:[0]},
-        {start:"07:00", end:"12:00", name:"Zondag met Christus", img:images.sunday, days:[0]},
-        {start:"12:00", end:"16:00", name:"Middaggenade", img:images.midday, days:[0]},
-        {start:"16:00", end:"18:00", name:"Non Stop", img:images.nonstop, days:[0]},
-        {start:"18:00", end:"18:30", name:"Praise FM Pop", img:images.pop, days:[0]},
-        {start:"18:30", end:"19:30", name:"Non Stop", img:images.nonstop, days:[0]},
-        {start:"19:30", end:"23:59", name:"Aanbidding", img:images.aanbidding, days:[0]}
+        {start:"00:00", end:"06:00", name:"Nachtgenade", img:images.nachtgenade, desc: "Fleur Jansen omhult u met stilte en gebed."},
+        {start:"06:00", end:"07:00", name:"Praise FM Aanbidding", img:images.aanbidding, desc: "Continue stroom van aanbidding."},
+        {start:"07:00", end:"12:00", name:"Ochtendshow", img:images.ochtendshow, days:[1,2,3,4,5,6], desc: "Lieke van Dijk begroet u met opbouwende lof."},
+        {start:"07:00", end:"12:00", name:"Zondag met Christus", img:images.zondag, days:[0], desc: "Joris de Wit deelt geestelijke inzichten."},
+        {start:"12:00", end:"16:00", name:"Middaggenade", img:images.middaggenade, desc: "Daan Bakker brengt u vrede en lof midden in de drukte van de middag."},
+        {start:"16:00", end:"17:00", name:"Praise FM Aanbidding", img:images.aanbidding, desc: "Continue stroom van aanbidding."},
+        {start:"17:00", end:"18:00", name:"Praise FM POP", img:images.pop, desc: "Luuk Vermeulen presenteert de nieuwste lofzangen."},
+        {start:"18:00", end:"20:00", name:"Praise FM Thuisreis", img:images.thuisreis, days:[1,2,3,4,5], desc: "Eva de Jong begeleidt u naar huis."},
+        {start:"18:00", end:"20:00", name:"Praise FM Aanbidding", img:images.aanbidding, days:[0,6], desc: "Continue stroom van aanbidding."},
+        {start:"20:00", end:"00:00", name:"Praise FM Aanbidding", img:images.aanbidding, desc: "Continue stroom van aanbidding."}
     ];
 
-    function getAmsterdamTime() { return new Date(new Date().toLocaleString("nl-NL",{timeZone:"Europe/Amsterdam"})); }
-    function timeToMins(t) { const [h,m]=t.split(":").map(Number); return h*60+m; }
+    function getTime() { 
+        return new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Amsterdam" })); 
+    }
+    function timeToMins(t) { 
+        const [h,m] = t.split(":").map(Number); 
+        return h * 60 + m; 
+    }
+
     function getCurrentAndNext() {
-        const now = getAmsterdamTime();
+        const now = getTime();
         const day = now.getDay();
         const mins = timeToMins(now.toTimeString().slice(0,5));
         let current = null;
@@ -240,39 +208,39 @@
             if (p.days && !p.days.includes(day)) continue;
             const s = timeToMins(p.start);
             const e = timeToMins(p.end);
-            const end = e < s ? e + 1440 : e;
+            const end = e <= s ? e + 1440 : e;
             if (mins >= s && mins < end) {
-                if (!current || e > timeToMins(current.end)) current = p;
+                if (!current || end > timeToMins(current.end)) current = p;
             }
-            if (mins < s) future.push({prog:p, startMins:s});
+            if (mins < s) future.push({prog: p, startMins: s});
         }
         if (future.length === 0) {
             const tomorrow = (day + 1) % 7;
             for (const p of schedule) {
-                if (!p.days || p.days.includes(tomorrow)) future.push({prog:p, startMins:timeToMins(p.start)});
+                if (!p.days || p.days.includes(tomorrow)) future.push({prog: p, startMins: timeToMins(p.start)});
             }
         }
         future.sort((a,b) => a.startMins - b.startMins);
         return {
-            current: current || {name:"Praise FM Nederland", img:images.default},
+            current: current || {name: "Praise FM Nederland", img: images.default, start: null, end: null},
             next1: future[0]?.prog || schedule[0],
             next2: future[1]?.prog || schedule[1]
         };
     }
 
-    let currentTrack = {title:"", artist:"", duration:0, startTime:0};
+    let currentTrack = {title: "", artist: "", duration: 0, startTime: 0};
     const recents = [];
     let trackTimer = null;
 
-    function formatTime(totalMinutes) {
-        const hrs = Math.floor(totalMinutes / 60);
-        const mins = Math.floor(totalMinutes % 60);
-        return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+    function formatTime(seconds) {
+        const min = Math.floor(seconds / 60);
+        const sec = Math.floor(seconds % 60);
+        return `${min}:${sec.toString().padStart(2, '0')}`;
     }
 
     function updateProgramProgress() {
         const {current} = getCurrentAndNext();
-        const now = getAmsterdamTime();
+        const now = getTime();
         if (current.start && current.end) {
             const s = timeToMins(current.start);
             const e = timeToMins(current.end);
@@ -291,63 +259,96 @@
     }
 
     async function fetchAlbumCover(artist, title) {
+        if (!artist || !title) return images.default;
+        const query = encodeURIComponent(`${artist} ${title}`);
+        const url = `https://itunes.apple.com/search?term=${query}&entity=song&limit=1`;
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            if (data.results?.[0]?.artworkUrl100) {
+                return data.results[0].artworkUrl100.replace('100x100', '600x600');
+            }
+        } catch (e) {}
         return images.default;
     }
 
     function formatProgramName(p) {
         if (!p) return "Praise FM Nederland";
-        const base = p.name;
-        if (base === "Nachtgezang" || base === "Aanbidding" || base === "Non Stop") return base;
-        const host = hosts[base] || "Presentator";
+        const base = p.name.replace(/ \([^)]*\)$/, '').trim();
+        if (["Praise FM Aanbidding", "Praise FM POP"].includes(base)) {
+            return base;
+        }
+        const host = hosts[base] || "Praise FM";
         return `${base} met ${host}`;
+    }
+
+    function formatRange(p) {
+        const [sh, sm] = p.start.split(":").map(Number);
+        const [eh, em] = p.end.split(":").map(Number);
+        const sSuffix = sh >= 12 ? "PM" : "AM";
+        const eSuffix = eh >= 12 ? "PM" : "AM";
+        const sHour = ((sh + 11) % 12) + 1;
+        const eHour = ((eh + 11) % 12) + 1;
+        return `${sHour}:${sm.toString().padStart(2, '0')} ${sSuffix} - ${eHour}:${em.toString().padStart(2, '0')} ${eSuffix}`;
     }
 
     function updateDisplay() {
         const {current, next1, next2} = getCurrentAndNext();
-        const now = getAmsterdamTime();
-        document.querySelectorAll("#mainImg, #miniImg").forEach(el => el.src = current.img);
+        document.getElementById("mainImg").src = current.img || images.default;
+        document.getElementById("miniImg").src = current.img || images.default;
         document.getElementById("upnextImg1").src = next1.img || images.default;
         document.getElementById("upnextImg2").src = next2.img || images.default;
         const displayName = formatProgramName(current);
         document.getElementById("programTitle").textContent = displayName;
-        document.getElementById("miniTitle").textContent = displayName;
-        document.getElementById("miniArtist").textContent = "Continue Aanbidding";
-        const fmt = (p, offset=0) => {
-            if (!p.start) return "--:--";
-            const d = new Date(now);
-            d.setDate(d.getDate() + offset);
-            const [h,m] = p.start.split(":");
-            d.setHours(+h, +m, 0, 0);
-            return d.toLocaleTimeString("nl-NL", {hour:"2-digit", minute:"2-digit", hour12:false, timeZone:"Europe/Amsterdam"});
-        };
-        const todayNext = schedule.filter(p => (!p.days || p.days.includes(now.getDay())) && timeToMins(p.start) > timeToMins(now.toTimeString().slice(0,5)));
-        const off1 = todayNext.length > 0 ? 0 : 1;
-        const off2 = todayNext.length > 1 ? 0 : 1;
+        document.getElementById("miniTitle").textContent = currentTrack.title || displayName;
+        document.getElementById("miniArtist").textContent = currentTrack.artist || "Continue Aanbidding";
+        document.getElementById("upnextTime1").textContent = "VOLGENDE: " + formatRange(next1);
         document.getElementById("upnextTitle1").textContent = formatProgramName(next1);
-        document.getElementById("upnextTime1").textContent = fmt(next1, off1);
+        document.getElementById("upnextDesc1").textContent = next1.desc || "-";
+        document.getElementById("upnextTime2").textContent = formatRange(next2);
         document.getElementById("upnextTitle2").textContent = formatProgramName(next2);
-        document.getElementById("upnextTime2").textContent = fmt(next2, off2);
+        document.getElementById("upnextDesc2").textContent = next2.desc || "-";
+
         if (current.start && current.end) {
             const s = timeToMins(current.start);
             const e = timeToMins(current.end);
-            const n = timeToMins(now.toTimeString().slice(0,5));
+            const n = timeToMins(getTime().toTimeString().slice(0,5));
             const total = (e - s + 1440) % 1440;
             const elapsed = (n - s + 1440) % 1440;
             const pct = total > 0 ? (elapsed / total) * 100 : 0;
-            document.getElementById("progressRing").style.background = `conic-gradient(var(--orange) ${pct}%, transparent ${pct}%)`;
+            document.getElementById("progressRing").style.background = `conic-gradient(var(--primary) ${pct}%, transparent ${pct}%)`;
         } else {
-            document.getElementById("progressRing").style.background = "conic-gradient(var(--orange) 0%, transparent 0%)";
+            document.getElementById("progressRing").style.background = "conic-gradient(var(--primary) 0%, transparent 0%)";
         }
         updateProgramProgress();
     }
 
     async function processMetadata(artist, title) {
         if (trackTimer) clearInterval(trackTimer);
+        const lowerTitle = title.toLowerCase();
+        
+        // Detecta comerciais (inclui "commerciell")
+        if (lowerTitle.includes("commercial") || lowerTitle.includes("ad") || lowerTitle.includes("commerciell")) {
+            currentTrack = { title: "Commercial Break", artist: "Praise FM", duration: 0, startTime: 0 };
+            document.getElementById("mainImg").src = images.commercial;
+            document.getElementById("miniImg").src = images.commercial;
+            return;
+        }
+        // Detecta spots
+        if (lowerTitle.includes("spot")) {
+            currentTrack = { title: "Spot", artist: "Praise FM", duration: 0, startTime: 0 };
+            document.getElementById("mainImg").src = images.spot;
+            document.getElementById("miniImg").src = images.spot;
+            return;
+        }
+
+        // Música normal
+        currentTrack = { title, artist, duration: 0, startTime: Date.now() };
         const cover = await fetchAlbumCover(artist, title);
         const key = `${artist}-${title}`;
         if (!recents.some(t => t.key === key)) {
-            recents.unshift({title, artist, cover, key});
-            if (recents.length > 3) recents.pop();
+            recents.unshift({ title, artist, cover, key });
+            if (recents.length > 4) recents.pop();
             document.getElementById("recentList").innerHTML = recents.map(t => `
                 <div class="recent-item">
                     <img src="${t.cover}" class="recent-cover" onerror="this.src='${images.default}'">
@@ -362,16 +363,18 @@
         trackTimer = setInterval(updateProgramProgress, 1000);
     }
 
-    const es = new EventSource("https://api.zeno.fm/mounts/metadata/subscribe/hvwifp8ezc6tv");
-    es.onmessage = e => {
-        try {
-            const d = JSON.parse(e.data);
-            if (d.streamTitle) {
-                const parts = d.streamTitle.split(" - ");
-                processMetadata(parts[0]||"", parts.slice(1).join(" - ")||"");
-            }
-        } catch {}
-    };
+    try {
+        const es = new EventSource("https://api.zeno.fm/mounts/metadata/subscribe/olisuxy9v3vtv");
+        es.onmessage = e => {
+            try {
+                const d = JSON.parse(e.data);
+                if (d.streamTitle) {
+                    const parts = d.streamTitle.split(" - ");
+                    processMetadata(parts[0] || "", parts.slice(1).join(" - ") || "");
+                }
+            } catch {}
+        };
+    } catch(e) {}
 
     function togglePlay() {
         if (audio.paused) { audio.play(); document.getElementById("miniPlayer").classList.add("show"); }
@@ -391,9 +394,15 @@
         const rect = e.currentTarget.getBoundingClientRect();
         const percent = (e.clientX - rect.left) / rect.width;
         audio.volume = Math.max(0, Math.min(1, percent));
+        audio.muted = false;
         document.getElementById("miniVolumeFill").style.width = (audio.volume*100)+'%';
     };
-    document.getElementById("miniTrackBar").onclick = (e) => {};
+    document.getElementById("miniVolumeIcon").onclick = () => {
+        audio.muted = !audio.muted;
+        document.getElementById("miniVolumeIcon").innerHTML = audio.muted 
+            ? '<svg viewBox="0 0 24 24"><path d="M16.5 12l4.5 4.5-1.5 1.5L15 13.5 11.5 17H7v-6h4.5L15 7.5l4.5-4.5 1.5 1.5L16.5 12z"/></svg>' 
+            : '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+    };
 
     setInterval(updateDisplay, 8000);
     updateDisplay();
