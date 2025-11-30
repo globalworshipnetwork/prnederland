@@ -71,9 +71,40 @@
             .mini-controls { gap:10px; }
             .mini-volume { width:80px; }
         }
+        /* 🌍 Barra informativa global */
+        #global-access-banner {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            z-index: 9999;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        #global-access-banner button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .banner-shim { height: 56px; }
     </style>
 </head>
 <body>
+<!-- 🌍 Barra informativa: visível para todos, globalmente -->
+<div id="global-access-banner">
+    🌍 Praise FM Nederland is tijdelijk wereldwijd beschikbaar! Geniet van onze programma's.
+    <button onclick="document.getElementById('global-access-banner').style.display='none'">×</button>
+</div>
+<div class="banner-shim"></div>
+
 <div class="container">
     <h1 class="station-title">Praise FM Nederland</h1>
     <p class="station-subtitle">Continue Aanbidding</p>
@@ -154,7 +185,6 @@
     const STREAM_URL = "/api/stream";
     const audio = new Audio(STREAM_URL);
     audio.volume = 0.8;
-
     const images = {
         default: "/image/logo-nl.webp",
         nachtgenade: "/image/nachtgenade.webp",
@@ -165,11 +195,9 @@
         pop: "/image/pop.webp",
         thuisreis: "/image/thuisreis.webp",
         nonstop: "/image/nonstop.webp",
-        // 🔥 Correção: nome do arquivo com "C" maiúsculo
         commercial: "/image/Commerciell.png",
         spot: "/image/spot.png"
     };
-
     const hosts = {
         "Ochtendshow": "Lieke van Dijk",
         "Middaggenade": "Daan Bakker",
@@ -178,23 +206,16 @@
         "Praise FM Thuisreis": "Eva de Jong",
         "Nachtgenade": "Fleur Jansen"
     };
-
-    // 🔥 Schedule atualizado conforme sua agenda de domingo
     const schedule = [
         {start:"00:00", end:"06:00", name:"Nachtgenade", img:images.nachtgenade, desc: "Fleur Jansen omhult u met stilte en gebed."},
         {start:"06:00", end:"07:00", name:"Praise FM Aanbidding", img:images.aanbidding, desc: "Continue stroom van aanbidding."},
         {start:"07:00", end:"12:00", name:"Zondag met Christus", img:images.zondag, days:[0], desc: "Joris de Wit deelt geestelijke inzichten."},
         {start:"12:00", end:"16:00", name:"Middaggenade", img:images.middaggenade, desc: "Daan Bakker brengt u vrede en lof midden in de drukte van de middag."},
-        // ⏰ 16:00–18:00 → Non Stop (domingo)
         {start:"16:00", end:"18:00", name:"Praise FM Non Stop", img:images.nonstop, days:[0], desc: "Non-stop praise hits voor uw middag en avond."},
-        // ⏰ 18:00–18:30 → POP (domingo)
         {start:"18:00", end:"18:30", name:"Praise FM POP", img:images.pop, days:[0], desc: "Luuk Vermeulen presenteert de nieuwste lofzangen."},
-        // ⏰ 18:30–19:30 → Non Stop (domingo)
         {start:"18:30", end:"19:30", name:"Praise FM Non Stop", img:images.nonstop, days:[0], desc: "Non-stop praise hits voor uw avond."},
-        // ⏰ 19:30–00:00 → Aanbidding (domingo)
         {start:"19:30", end:"00:00", name:"Praise FM Aanbidding", img:images.aanbidding, days:[0], desc: "Continue stroom van aanbidding."}
     ];
-
     function getTime() { 
         return new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Amsterdam" })); 
     }
@@ -202,7 +223,6 @@
         const [h,m] = t.split(":").map(Number); 
         return h * 60 + m; 
     }
-
     function getCurrentAndNext() {
         const now = getTime();
         const day = now.getDay();
@@ -232,7 +252,6 @@
             next2: future[1]?.prog || schedule[1]
         };
     }
-
     function formatProgramName(p) {
         if (!p) return "Praise FM Nederland";
         const base = p.name.replace(/ \([^)]*\)$/, '').trim();
@@ -242,7 +261,6 @@
         const host = hosts[base] || "Praise FM";
         return `${base} met ${host}`;
     }
-
     function formatRange(p) {
         const [sh, sm] = p.start.split(":").map(Number);
         const [eh, em] = p.end.split(":").map(Number);
@@ -252,17 +270,14 @@
         const eHour = ((eh + 11) % 12) + 1;
         return `${sHour}:${sm.toString().padStart(2, '0')} ${sSuffix} - ${eHour}:${em.toString().padStart(2, '0')} ${eSuffix}`;
     }
-
     let currentTrack = {title: "", artist: "", duration: 0, startTime: 0};
     const recents = [];
     let trackTimer = null;
-
     function formatTime(seconds) {
         const min = Math.floor(seconds / 60);
         const sec = Math.floor(seconds % 60);
         return `${min}:${sec.toString().padStart(2, '0')}`;
     }
-
     function updateProgramProgress() {
         const {current} = getCurrentAndNext();
         const now = getTime();
@@ -282,7 +297,6 @@
             document.getElementById("miniTrackDuration").textContent = "Live";
         }
     }
-
     async function fetchAlbumCover(artist, title) {
         if (!artist || !title) return images.default;
         const query = encodeURIComponent(`${artist} ${title}`);
@@ -296,12 +310,9 @@
         } catch (e) {}
         return images.default;
     }
-
     async function processMetadata(artist, title) {
         if (trackTimer) clearInterval(trackTimer);
         const lowerTitle = title.toLowerCase();
-        
-        // 🔥 Detecta "commerciell" (mesmo com grafia errada) e "Commerciell.png"
         if (lowerTitle.includes("commercial") || lowerTitle.includes("ad") || lowerTitle.includes("commerciell")) {
             currentTrack = { title: "Commercial Break", artist: "Praise FM", duration: 0, startTime: 0 };
             document.getElementById("mainImg").src = images.commercial;
@@ -314,7 +325,6 @@
             document.getElementById("miniImg").src = images.spot;
             return;
         }
-
         currentTrack = { title, artist, duration: 0, startTime: Date.now() };
         const cover = await fetchAlbumCover(artist, title);
         const key = `${artist}-${title}`;
@@ -334,7 +344,6 @@
         updateDisplay();
         trackTimer = setInterval(updateProgramProgress, 1000);
     }
-
     try {
         const es = new EventSource("https://api.zeno.fm/mounts/metadata/subscribe/olisuxy9v3vtv");
         es.onmessage = e => {
@@ -347,7 +356,6 @@
             } catch {}
         };
     } catch(e) {}
-
     function togglePlay() {
         if (audio.paused) { audio.play(); document.getElementById("miniPlayer").classList.add("show"); }
         else audio.pause();
@@ -357,7 +365,6 @@
         document.querySelector("#bigPlay").innerHTML = playing ? pauseSvg + ' Pauzeren' : playSvg + ' Afspelen';
         document.getElementById("miniPlayPause").innerHTML = playing ? pauseSvg : playSvg;
     }
-
     document.getElementById("bigPlay").onclick = togglePlay;
     document.getElementById("miniPlayPause").onclick = togglePlay;
     document.getElementById("miniRewind").onclick = () => audio.currentTime = Math.max(0, audio.currentTime - 15);
@@ -375,7 +382,6 @@
             ? '<svg viewBox="0 0 24 24"><path d="M16.5 12l4.5 4.5-1.5 1.5L15 13.5 11.5 17H7v-6h4.5L15 7.5l4.5-4.5 1.5 1.5L16.5 12z"/></svg>' 
             : '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
     };
-
     function updateDisplay() {
         const {current, next1, next2} = getCurrentAndNext();
         document.getElementById("mainImg").src = current.img || images.default;
@@ -392,7 +398,6 @@
         document.getElementById("upnextTime2").textContent = formatRange(next2);
         document.getElementById("upnextTitle2").textContent = formatProgramName(next2);
         document.getElementById("upnextDesc2").textContent = next2.desc || "-";
-
         if (current.start && current.end) {
             const s = timeToMins(current.start);
             const e = timeToMins(current.end);
@@ -406,7 +411,6 @@
         }
         updateProgramProgress();
     }
-
     setInterval(updateDisplay, 8000);
     updateDisplay();
 </script>
