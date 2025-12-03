@@ -43,7 +43,7 @@
         .upnext-img { width:60px; height:60px; border-radius:0; object-fit:cover; background:#eee; }
         .upnext-time { font-size:14px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px; }
         .upnext-title { font-size:16px; font-weight:700; margin-top:4px; }
-        .upnext-desc { font-size:14px; color:var(--grey); margin-top:4; }
+        .upnext-desc { font-size:14px; color:var(--grey); margin-top:4px; }
         .recently { margin-top:40px; text-align:left; }
         .recently-header { font-size:13px; font-weight:700; color:var(--grey); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
         .recent-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-color); }
@@ -205,6 +205,7 @@
         zondag: "/image/zondag.webp",
         pop: "/image/pop.webp",
         thuisreis: "/image/thuisreis.webp",
+        nonstop: "/image/nonstop.webp",
         commercial: "/image/Commerciell.png",
         spot: "/image/spot.png"
     };
@@ -218,7 +219,7 @@
         "Nachtgenade": "Fleur Jansen"
     };
 
-    // ✅ SCHEDULE ATUALIZADO conforme SCHEDULE NEDERLAND.txt
+    // ✅ SCHEDULE ATUALIZADO conforme última versão de SCHEDULE NEDERLAND.txt
     const schedule = [
         // 00:00–06:00 — Nachtgenade (todos os dias)
         {start:"00:00", end:"06:00", name:"Nachtgenade", img:images.nachtgenade, desc: "Fleur Jansen omhult u met stilte en gebed."},
@@ -236,6 +237,8 @@
         {start:"17:00", end:"18:00", name:"Praise FM POP", img:images.pop, desc: "Luuk Vermeulen presenteert de nieuwste lofzangen."},
         // 18:00–20:00 — Thuisreis (segunda a sábado)
         {start:"18:00", end:"20:00", name:"Praise FM Thuisreis", img:images.thuisreis, days:[1,2,3,4,5,6], desc: "Eva de Jong begeleidt u naar huis."},
+        // 18:00–20:00 — Praise FM Non Stop (apenas domingo)
+        {start:"18:00", end:"20:00", name:"Praise FM Non Stop", img:images.nonstop, days:[0], desc: "2 uur ononderbroken muziek – geen onderbrekingen."},
         // 20:00–00:00 — Aanbidding (todos os dias)
         {start:"20:00", end:"00:00", name:"Praise FM Aanbidding", img:images.aanbidding, desc: "Continue stroom van aanbidding."}
     ];
