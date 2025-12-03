@@ -7,6 +7,16 @@
     <meta name="theme-color" content="#1a365d">
     <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
     <link rel="manifest" href="/manifest.json">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-29P4WM48M2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-29P4WM48M2');
+    </script>
+
     <style>
         :root { --primary:#1a365d; --dark:#111; --grey:#555; --light-grey:#888; --bg:#fff; --border-color:#ddd; }
         * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; }
@@ -227,7 +237,6 @@
         // 20:00–00:00 — Aanbidding (todos os dias)
         {start:"20:00", end:"00:00", name:"Praise FM Aanbidding", img:images.aanbidding, desc: "Continue stroom van aanbidding."}
     ];
-
     function getTime() { 
         return new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Amsterdam" })); 
     }
@@ -235,7 +244,6 @@
         const [h,m] = t.split(":").map(Number); 
         return h * 60 + m; 
     }
-
     function getCurrentAndNext() {
         const now = getTime();
         const day = now.getDay();
@@ -265,7 +273,6 @@
             next2: future[1]?.prog || schedule[1]
         };
     }
-
     function formatProgramName(p) {
         if (!p) return "Praise FM Nederland";
         const base = p.name.replace(/ \([^)]*\)$/, '').trim();
@@ -275,7 +282,6 @@
         const host = hosts[base] || "Praise FM";
         return `${base} met ${host}`;
     }
-
     function formatRange(p) {
         const [sh, sm] = p.start.split(":").map(Number);
         const [eh, em] = p.end.split(":").map(Number);
@@ -285,17 +291,14 @@
         const eHour = ((eh + 11) % 12) + 1;
         return `${sHour}:${sm.toString().padStart(2, '0')} ${sSuffix} - ${eHour}:${em.toString().padStart(2, '0')} ${eSuffix}`;
     }
-
     let currentTrack = {title: "", artist: "", duration: 0, startTime: 0};
     const recents = [];
     let trackTimer = null;
-
     function formatTime(seconds) {
         const min = Math.floor(seconds / 60);
         const sec = Math.floor(seconds % 60);
         return `${min}:${sec.toString().padStart(2, '0')}`;
     }
-
     function updateProgramProgress() {
         const {current} = getCurrentAndNext();
         const now = getTime();
@@ -315,7 +318,6 @@
             document.getElementById("miniTrackDuration").textContent = "Live";
         }
     }
-
     async function fetchAlbumCover(artist, title) {
         if (!artist || !title) return images.default;
         const query = encodeURIComponent(`${artist} ${title}`);
@@ -329,7 +331,6 @@
         } catch (e) {}
         return images.default;
     }
-
     async function processMetadata(artist, title) {
         if (trackTimer) clearInterval(trackTimer);
         const lowerTitle = title.toLowerCase();
@@ -364,7 +365,6 @@
         updateDisplay();
         trackTimer = setInterval(updateProgramProgress, 1000);
     }
-
     try {
         const es = new EventSource("https://api.zeno.fm/mounts/metadata/subscribe/olisuxy9v3vtv");
         es.onmessage = e => {
@@ -377,17 +377,25 @@
             } catch {}
         };
     } catch(e) {}
-
     function togglePlay() {
-        if (audio.paused) { audio.play(); document.getElementById("miniPlayer").classList.add("show"); }
-        else audio.pause();
+        if (audio.paused) { 
+            audio.play(); 
+            document.getElementById("miniPlayer").classList.add("show"); 
+        } else {
+            audio.pause(); 
+        }
         const playing = !audio.paused;
         const playSvg = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
         const pauseSvg = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
         document.querySelector("#bigPlay").innerHTML = playing ? pauseSvg + ' Pauzeren' : playSvg + ' Afspelen';
         document.getElementById("miniPlayPause").innerHTML = playing ? pauseSvg : playSvg;
-    }
 
+        // 📊 Envia evento ao Google Analytics
+        gtag('event', 'toggle_play', {
+            event_category: 'Player',
+            event_label: playing ? 'play' : 'pause'
+        });
+    }
     document.getElementById("bigPlay").onclick = togglePlay;
     document.getElementById("miniPlayPause").onclick = togglePlay;
     document.getElementById("miniRewind").onclick = () => audio.currentTime = Math.max(0, audio.currentTime - 15);
@@ -405,7 +413,6 @@
             ? '<svg viewBox="0 0 24 24"><path d="M16.5 12l4.5 4.5-1.5 1.5L15 13.5 11.5 17H7v-6h4.5L15 7.5l4.5-4.5 1.5 1.5L16.5 12z"/></svg>' 
             : '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
     };
-
     function updateDisplay() {
         const {current, next1, next2} = getCurrentAndNext();
         document.getElementById("mainImg").src = current.img || images.default;
@@ -435,7 +442,6 @@
         }
         updateProgramProgress();
     }
-
     setInterval(updateDisplay, 8000);
     updateDisplay();
 </script>
